@@ -197,6 +197,33 @@
         $(go.TextBlock, "New Task", { font: '13px Lato, sans-serif', margin: 6,  })
       )
     );
+	myDiagram.nodeTemplateMap.add('removebutton',
+      $(go.Node, "Horizontal",
+        {
+          selectable: false,
+          click: function(e, node) {
+		  if(e.diagram.selection.size > 0 && confirm("Are you sure you want to delete this task?")){
+			var nodesArr = [];
+			e.diagram.selection.each(function(n) {			
+				if (!n instanceof go.Node) return;			
+				nodesArr.push(n);
+			})
+			myDiagram.startTransaction('delete nodes');			
+			nodesArr.forEach(function(n) {
+				myDiagram.remove(n);
+			})
+			myDiagram.commitTransaction('delete nodes');
+		  }
+          },
+          background: 'white'
+        },
+        $(go.Panel, "Auto",
+          $(go.Shape, "Rectangle", { strokeWidth: 0, stroke: null, fill: '#CC293D' }),
+          $(go.Shape, "XLine", { margin: 6, strokeWidth: 2, width: 12, height: 12, stroke: 'white' })
+        ),
+        $(go.TextBlock, "Remove Task", { font: '13px Lato, sans-serif', margin: 6,  })
+      )
+    );
 
     // While dragging, highlight the dragged-over group
     function highlightGroup(grp, show) {
@@ -349,6 +376,7 @@
 {"key":"Release Ready", "text":"Release Ready", "isGroup":true, "color":"0", "loc":"936 23.522847498307936", "size":"230 450"},
 {"key":"Done", "text":"Done", "isGroup":true, "color":"0", "loc":"1170 23.522847498307936", "size":"230 450"},
 {"key":-1, "group":"TO DO", "category":"newbutton", "loc":"12 35.52284749830794"},
+{"key":-2, "group":"TO DO", "category":"removebutton", "loc":"12 35.52284749830794"},
 {"key":1, "text":"QC-123", "group":"TO DO", "color":"2", "loc":"12 131.52284749830795"},
 {"key":2, "text":"Correlation - Exclude Rishon Le-Zion", "group":"QA", "color":"1", "loc":"714 95.52284749830794"},
 {"key":3, "text":"Force Kfir to return to OSS", "group":"TO DO", "color":1, "loc":"12 71.52284749830794"},
